@@ -214,7 +214,7 @@ func main() {
     }
   }
 
-  stageSelectedFiles(files, worktree)
+  stageSelectedFiles(selection, worktree)
 
   msg := commitMessageWizard()
 
