@@ -3,50 +3,30 @@ package main
 import (
 	"errors"
 	"fmt"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
 	"time"
 
-	"github.com/go-git/go-git/v5/plumbing/object"
 	"github.com/go-git/go-git/v5"
+	"github.com/go-git/go-git/v5/plumbing/object"
+	"github.com/koenverburg/git-fast/utils"
 	"github.com/manifoldco/promptui"
 )
 
-// @Summary CheckIfError
-// @Description
-// @Param  eError
-func CheckIfError(e error) {
-  if e != nil {
-    log.Fatal(e)
-    panic(e)
-  }
-}
-
-func filterEmptyString(s []string ) []string {
-  var cleaned []string
-	for _, str := range s {
-    if str != "" {
-      cleaned = append(cleaned, str)
-    }
-	}
-	return cleaned
-}
-
 func getUntrackedFiles() ([]string, git.Worktree) {
   dir, err := filepath.Abs(filepath.Dir(os.Args[1]))
-  CheckIfError(err)
+  utils.CheckIfError(err)
   fmt.Println(fmt.Sprint("folder %s", dir))
 
   repo, err := git.PlainOpen(dir)
-  CheckIfError(err)
+  utils.CheckIfError(err)
 
   worktree, err := repo.Worktree()
-  CheckIfError(err)
+  utils.CheckIfError(err)
 
   status, err := worktree.Status()
-  CheckIfError(err)
+  utils.CheckIfError(err)
 
   s1 := strings.ReplaceAll(status.String(), "?? ", "")
   s2 := strings.ReplaceAll(s1, "A  ", "")
@@ -58,11 +38,11 @@ func getUntrackedFiles() ([]string, git.Worktree) {
 func genericSelectPrompt(label string, items []string) string {
   prompt := promptui.Select{
 		Label: label,
-    Items: filterEmptyString(append(items, "none")),
+    Items: utils.FilterEmptyString(append(items, "none")),
   }
 
 	_, result, err := prompt.Run()
-  CheckIfError(err)
+  utils.CheckIfError(err)
 
   return result
 }
@@ -70,11 +50,11 @@ func genericSelectPrompt(label string, items []string) string {
 func showUntrackedList(files []string) string {
   prompt := promptui.Select{
 		Label: "Select files to commit",
-		Items: filterEmptyString(append(files, "done")),
+		Items: utils.FilterEmptyString(append(files, "done")),
 	}
 
 	_, result, err := prompt.Run()
-  CheckIfError(err)
+  utils.CheckIfError(err)
 
   return result
 }
@@ -99,7 +79,7 @@ func genericInputPrompt(label string) string {
 	}
 
 	result, err := prompt.Run()
-  CheckIfError(err)
+  utils.CheckIfError(err)
 
   return result
 }
@@ -225,7 +205,7 @@ func main() {
 			When:  time.Now(),
 		},
 	})
-  CheckIfError(commitErr)
+  utils.CheckIfError(commitErr)
 
   fmt.Println(msg)
 }
