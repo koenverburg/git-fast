@@ -1,6 +1,10 @@
 package utils
 
-import "log"
+import (
+	"log"
+
+	"github.com/koenverburg/git-fast/types"
+)
 
 // @Summary CheckIfError
 // @Description
@@ -24,4 +28,20 @@ func FilterEmptyString(s []string ) []string {
     }
 	}
 	return cleaned
+}
+
+func IsEmpty(str string) bool {
+  if str == "" {
+    return true
+  }
+  return false
+}
+
+func CreateSegment(value string, part string) types.Segment {
+  var s types.Segment
+
+  s.Value = value
+  s.Part = part
+
+  return s
 }
