@@ -31,7 +31,7 @@ func FilterEmptyString(s []string ) []string {
 }
 
 func IsEmpty(str string) bool {
-  if str == "" {
+  if str == "" && str != " " {
     return true
   }
   return false
